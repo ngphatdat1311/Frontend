@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="../../assets/logo.png">
+    <title>Blossom Admin – Tạo bài viết mới</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS dùng chung + CSS riêng FR-04/05 -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="../../css/staff/post-editor.css">
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/permissions.js"></script>
+</head>
+<body data-search="Tìm kiếm bài viết..." data-active="posts.html" data-editor-mode="create">
+
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <div class="main">
+        <header class="topbar" id="topbar"></header>
+
+        <main class="content fr04-workspace" data-node-id="3:44127">
+            <!-- 1. PAGE HEADING -->
+            <section class="fr04-heading" data-node-id="3:44128">
+                <div class="fr04-context" data-node-id="3:44129">
+                    <span class="fr04-crumb" id="editorCrumb" data-node-id="3:44130">Blossom / Quản trị / Tạo bài viết</span>
+                    <a href="posts.html" id="btnBackToPostList" style="color:var(--pink);font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">← Quay lại danh sách bài viết</a>
+                </div>
+
+                <div class="fr04-title-row" data-node-id="3:44131">
+                    <div class="fr04-title-block" data-node-id="3:44132">
+                        <h2 class="fr04-title" id="editorMainTitle" data-node-id="3:44133">Tạo bài viết mới</h2>
+                        <p class="fr04-subtitle" id="editorSubTitle" data-node-id="3:44134">Gieo một ý tưởng đẹp, lan tỏa cảm hứng mỗi ngày.</p>
+                    </div>
+
+                    <div class="fr04-actions" data-node-id="3:44135">
+                        <a href="posts.html" class="fr04-btn" style="text-decoration:none;display:inline-flex;align-items:center;">
+                            <span>Hủy bỏ</span>
+                        </a>
+                        <button type="button" class="fr04-btn" id="btnSaveDraft" data-node-id="3:44136">
+                            <span>Lưu bản nháp</span>
+                        </button>
+                        <button type="button" class="fr04-btn fr04-btn--primary" id="btnSubmitApproval" data-node-id="3:44138">
+                            <img src="../../assets/figma/send.svg" alt="" width="16" height="16">
+                            <span>Gửi duyệt</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <div id="stateWarningBanner" hidden></div>
+
+            <!-- 2. EDITORIAL WORKSPACE -->
+            <section class="fr04-editorial" data-node-id="3:44141">
+                <!-- LEFT COLUMN: WRITING + MEDIA -->
+                <div class="fr04-left-col" data-node-id="3:44142">
+                    <!-- CARD 1: NỘI DUNG BÀI VIẾT -->
+                    <div class="fr04-panel" data-node-id="3:44143">
+                        <div class="fr04-panel-head" data-node-id="3:44144">
+                            <h3 class="fr04-panel-title" data-node-id="3:44145">Nội dung bài viết</h3>
+                        </div>
+
+                        <div class="fr04-field" data-node-id="3:44146">
+                            <label class="fr04-label" for="postTitle" data-node-id="3:44147">Tiêu đề bài viết *</label>
+                            <input class="fr04-input" id="postTitle" type="text" value="5 bước dưỡng da cho buổi sáng rạng rỡ" placeholder="Nhập tiêu đề bài viết..." data-node-id="3:44148">
+                            <span class="fr04-error-msg" id="errTitle">Vui lòng nhập tiêu đề bài viết.</span>
+                        </div>
+
+                        <div class="fr04-grid-2" data-node-id="3:44150">
+                            <div class="fr04-field" data-node-id="3:44151">
+                                <label class="fr04-label" for="postCategory" data-node-id="3:44152">Chuyên mục *</label>
+                                <select class="fr04-select" id="postCategory" data-node-id="3:44153">
+                                    <option value="Chăm sóc da" selected>Chăm sóc da</option>
+                                    <option value="Trang điểm">Trang điểm</option>
+                                    <option value="Chống nắng">Chống nắng</option>
+                                    <option value="Khuyến mãi">Khuyến mãi</option>
+                                </select>
+                            </div>
+
+                            <div class="fr04-field" data-node-id="3:44155">
+                                <label class="fr04-label" for="postCampaign" data-node-id="3:44156">Chiến dịch</label>
+                                <select class="fr04-select" id="postCampaign" data-node-id="3:44157">
+                                    <option value="Nâng niu làn da · Tháng 11" selected>Nâng niu làn da · Tháng 11</option>
+                                    <option value="Rạng rỡ mùa lễ hội · Tháng 12">Rạng rỡ mùa lễ hội · Tháng 12</option>
+                                    <option value="Chăm da dịu nhẹ mỗi ngày">Chăm da dịu nhẹ mỗi ngày</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- RICH TEXT EDITOR -->
+                        <div class="fr04-editor-box" data-node-id="3:44159">
+                            <div class="fr04-toolbar" data-node-id="3:44160">
+                                <span style="font-size:12px;color:#574b50;white-space:nowrap;" data-node-id="3:44161">Đoạn văn ⌄</span>
+                                <button type="button" class="fr04-tool-btn" data-format="bold" title="In đậm" data-node-id="3:44162"><b>B</b></button>
+                                <button type="button" class="fr04-tool-btn" data-format="italic" title="In nghiêng" data-node-id="3:44163"><i>I</i></button>
+                                <button type="button" class="fr04-tool-btn" data-format="underline" title="Gạch chân">
+                                    <img src="../../assets/figma/underline.svg" alt="" width="15" height="15">
+                                </button>
+                                <button type="button" class="fr04-tool-btn" data-format="bullet" title="Danh sách">
+                                    <img src="../../assets/figma/list.svg" alt="" width="15" height="15">
+                                </button>
+                                <button type="button" class="fr04-tool-btn" data-format="number" title="Danh sách đánh số">
+                                    <img src="../../assets/figma/list-ordered.svg" alt="" width="15" height="15">
+                                </button>
+                                <button type="button" class="fr04-tool-btn" data-format="link" title="Chèn liên kết">
+                                    <img src="../../assets/figma/link.svg" alt="" width="15" height="15">
+                                </button>
+                                <button type="button" class="fr04-tool-btn" data-format="image" title="Đính kèm hình ảnh">
+                                    <img src="../../assets/figma/image.svg" alt="" width="15" height="15">
+                                </button>
+                                <button type="button" class="fr04-tool-btn" data-format="undo" title="Hoàn tác">
+                                    <img src="../../assets/figma/undo-2.svg" alt="" width="15" height="15">
+                                </button>
+                                <button type="button" class="fr04-tool-btn" data-format="redo" title="Làm lại">
+                                    <img src="../../assets/figma/redo-2.svg" alt="" width="15" height="15">
+                                </button>
+                            </div>
+
+                            <div class="fr04-article-body" data-node-id="3:44171">
+                                <input type="text" class="fr04-editor-headline" id="postHeadline" value="Bắt đầu ngày mới bằng một chút yêu thương." data-node-id="3:44172">
+                                <textarea class="fr04-editor-textarea" id="postCaption" data-node-id="3:44173">Làn da cũng cần được nâng niu mỗi ngày. Cùng Blossom xây dựng chu trình chăm sóc da đơn giản, dịu nhẹ để luôn tự tin với vẻ đẹp tự nhiên của bạn.
+
+1. Làm sạch da với sữa rửa mặt dịu nhẹ.
+2. Cân bằng làn da và bổ sung serum cấp ẩm.
+3. Dưỡng ẩm và bảo vệ da với kem chống nắng.</textarea>
+                                <input type="text" class="fr04-editor-hashtags" id="postHashtags" value="#BlossomBeauty #ChamSocDa #NangNiuLanDa" data-node-id="3:44175">
+                            </div>
+
+                            <div class="fr04-editor-status" data-node-id="3:44176">
+                                <span class="fr04-word-stat" id="wordCharStat" data-node-id="3:44177">248 từ · 1.286 ký tự</span>
+                                <span class="fr04-autosave-stat" data-node-id="3:44178">
+                                    <span id="autoSaveText">✓ Đã tự động lưu lúc 09:42</span>
+                                    <button type="button" class="fr04-autosave-trigger" id="btnTriggerAutoSave" title="Chạy tự động lưu ngay (Auto-save 30s)">Auto-save (<span id="autoSaveCountdown">30</span>s)</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 2: HÌNH ẢNH / VIDEO ĐÍNH KÈM -->
+                    <div class="fr04-panel" data-node-id="3:44179">
+                        <div class="fr04-panel-head" data-node-id="3:44180">
+                            <h3 class="fr04-panel-title" data-node-id="3:44181">Hình ảnh đính kèm</h3>
+                            <span style="font-size:10px;color:#a4989d;">JPG, PNG, WEBP (≤ 10MB) · MP4, MOV (≤ 50MB)</span>
+                        </div>
+
+                        <div class="fr04-media-row" data-node-id="3:44182">
+                            <div class="fr04-media-thumb" data-node-id="3:44183">
+                                <img id="mediaThumbImg" src="../../assets/figma/skincare-editorial.png" alt="Skincare editorial image">
+                                <video id="mediaThumbVideo" controls hidden></video>
+                            </div>
+
+                            <div class="fr04-media-details" data-node-id="3:44184">
+                                <p class="fr04-media-name" id="mediaFileName" data-node-id="3:44185">blossom-skincare-thang11.jpg</p>
+                                <p class="fr04-media-meta" id="mediaFileMeta" data-node-id="3:44186">1,8 MB · 1600 × 900 px · Ảnh đại diện</p>
+                                <div class="fr04-media-actions" data-node-id="3:44187">
+                                    <button type="button" class="fr04-media-link" id="btnReplaceMedia">Thay ảnh</button>
+                                    <span>·</span>
+                                    <button type="button" class="fr04-media-link" id="btnRemoveMedia">Xóa ảnh</button>
+                                </div>
+                                <span class="fr04-error-msg" id="errMedia"></span>
+                            </div>
+
+                            <button type="button" class="fr04-upload-icon-btn" id="btnUploadIcon" title="Tải tệp JPG/PNG/WEBP/MP4/MOV" data-node-id="3:46627">
+                                <img src="../../assets/figma/upload.svg" alt="Tải lên" width="18" height="18">
+                            </button>
+
+                            <input type="file" id="mediaFileInput" accept=".jpg,.jpeg,.png,.webp,.mp4,.mov,image/jpeg,image/png,image/webp,video/mp4,video/quicktime" hidden>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN: PUBLICATION SETTINGS + CHECKLIST + LIVE PREVIEW -->
+                <div class="fr04-right-col" data-node-id="3:44189">
+                    <!-- CARD 1: THÔNG TIN XUẤT BẢN -->
+                    <div class="fr04-panel" data-node-id="3:44190">
+                        <div class="fr04-panel-head" data-node-id="3:44191">
+                            <h3 class="fr04-panel-title" data-node-id="3:44192">Thông tin xuất bản</h3>
+                        </div>
+
+                        <div class="fr04-workflow-row" data-node-id="3:44193">
+                            <span class="fr04-workflow-label" data-node-id="3:44194">Trạng thái</span>
+                            <span class="fr04-status-pill" id="postStatusBadge" data-node-id="3:44195">Bản nháp</span>
+                        </div>
+
+                        <div class="fr04-divider" data-node-id="3:44197"></div>
+
+                        <div class="fr04-field" data-node-id="3:44198">
+                            <label class="fr04-label" for="postAuthor" data-node-id="3:44199">Tác giả</label>
+                            <input class="fr04-input" id="postAuthor" type="text" value="Trần Ngọc Mai" readonly data-node-id="3:44200">
+                        </div>
+
+                        <div class="fr04-field" data-node-id="3:44202">
+                            <label class="fr04-label" for="platformSelect" data-node-id="3:44203">Kênh đăng *</label>
+                            <select class="fr04-select" id="platformSelect" data-node-id="3:44204">
+                                <option value="Facebook & Instagram" selected>Facebook &amp; Instagram</option>
+                                <option value="Facebook, Instagram & TikTok">Facebook, Instagram &amp; TikTok</option>
+                                <option value="Facebook">Facebook Fanpage</option>
+                                <option value="Instagram">Instagram Business</option>
+                                <option value="TikTok">TikTok Official</option>
+                            </select>
+                            <div class="fr04-platform-pills" id="platformCheckboxes">
+                                <label class="fr04-plat-chip"><input type="checkbox" value="Facebook" checked> Facebook</label>
+                                <label class="fr04-plat-chip"><input type="checkbox" value="Instagram" checked> Instagram</label>
+                                <label class="fr04-plat-chip"><input type="checkbox" value="TikTok"> TikTok</label>
+                            </div>
+                            <span class="fr04-error-msg" id="errPlatform">Vui lòng chọn ít nhất một nền tảng đích.</span>
+                        </div>
+
+                        <div class="fr04-field" data-node-id="3:44206">
+                            <label class="fr04-label" for="plannedPublishInput" data-node-id="3:44207">Ngày đăng dự kiến *</label>
+                            <div class="fr04-date-input-wrap" data-node-id="3:44208">
+                                <img src="../../assets/figma/calendar-days.svg" alt="" width="16" height="16">
+                                <input type="text" id="plannedPublishInput" value="05/11/2026         08:00" placeholder="DD/MM/YYYY HH:mm" data-node-id="3:44210">
+                            </div>
+                        </div>
+
+                        <div class="fr04-field" data-node-id="3:44211">
+                            <label class="fr04-label" for="approverSelect" data-node-id="3:44212">Người phê duyệt *</label>
+                            <select class="fr04-select" id="approverSelect" data-node-id="3:44213">
+                                <option value="Nguyễn Minh Anh" selected>Nguyễn Minh Anh</option>
+                                <option value="Vũ Bảo Ngọc">Vũ Bảo Ngọc</option>
+                            </select>
+                        </div>
+
+                        <p class="fr04-pub-note" data-node-id="3:44215">
+                            Bài viết chỉ được lên lịch sau khi quản lý phê duyệt nội dung.
+                        </p>
+                    </div>
+
+                    <!-- CARD 2: KIỂM TRA TRƯỚC KHI GỬI (FR-04) -->
+                    <div class="fr04-panel" data-node-id="3:44216">
+                        <div class="fr04-panel-head" data-node-id="3:44217">
+                            <h3 class="fr04-panel-title" data-node-id="3:44218">Kiểm tra trước khi gửi</h3>
+                        </div>
+
+                        <div class="fr04-review-item is-done" id="chkItemTitle" data-node-id="3:44219">
+                            <img src="../../assets/figma/circle-check.svg" alt="" width="16" height="16">
+                            <span data-node-id="3:44221">Đã có tiêu đề bài viết</span>
+                        </div>
+
+                        <div class="fr04-review-item is-done" id="chkItemMedia" data-node-id="3:44222">
+                            <img src="../../assets/figma/circle-check.svg" alt="" width="16" height="16">
+                            <span data-node-id="3:44224">Đã thêm ảnh đại diện</span>
+                        </div>
+
+                        <div class="fr04-review-item is-done" id="chkItemSchedule" data-node-id="3:44225">
+                            <img src="../../assets/figma/circle-check.svg" alt="" width="16" height="16">
+                            <span data-node-id="3:44227">Đã chọn kênh và ngày đăng</span>
+                        </div>
+                    </div>
+
+                    <!-- CARD 3: LIVE PREVIEW ĐA NỀN TẢNG -->
+                    <div class="fr04-panel">
+                        <div class="fr04-panel-head">
+                            <h3 class="fr04-panel-title">Xem trước bài đăng (Preview)</h3>
+                            <span style="font-size:10px;color:#cc618a;font-weight:600;" id="previewActivePlatforms">Facebook · Instagram</span>
+                        </div>
+
+                        <div class="fr04-preview-tabs" id="previewTabs">
+                            <button type="button" class="fr04-preview-tab is-active" data-tab="Facebook">Facebook</button>
+                            <button type="button" class="fr04-preview-tab" data-tab="Instagram">Instagram</button>
+                            <button type="button" class="fr04-preview-tab" data-tab="TikTok">TikTok</button>
+                        </div>
+
+                        <div class="fr04-social-card">
+                            <div class="fr04-social-head">
+                                <img class="fr04-social-avatar" src="../../assets/logo.png" alt="Blossom Beauty">
+                                <div class="fr04-social-author">
+                                    <b>Blossom Beauty Store</b>
+                                    <small id="previewChannelMeta">Facebook Fanpage · Dự kiến 05/11/2026 08:00</small>
+                                </div>
+                            </div>
+                            <h4 class="fr04-social-title" id="previewHeadline">Bắt đầu ngày mới bằng một chút yêu thương.</h4>
+                            <p class="fr04-social-caption" id="previewBody"></p>
+                            <p class="fr04-social-tags" id="previewTags">#BlossomBeauty #ChamSocDa #NangNiuLanDa</p>
+                            <div class="fr04-social-media">
+                                <img id="previewMediaImg" src="../../assets/figma/skincare-editorial.png" alt="Preview">
+                                <video id="previewMediaVideo" controls hidden></video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer" id="footer"></footer>
+    </div>
+
+    <script src="../../js/components.js"></script>
+    <script src="../../js/layout.js"></script>
+    <script src="../../js/notifications-store.js"></script>
+    <script src="../../js/staff/post-editor.js"></script>
+</body>
+</html>
