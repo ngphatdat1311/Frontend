@@ -1,7 +1,7 @@
 /* ==========================================================
    FR-11 · CONTENT CALENDAR CONTROLLER (T06A667)
    - 3 chế độ xem: Tháng (Month) / Tuần (Week) / Ngày (Day)
-   - Nhãn màu theo nền tảng (Facebook, Instagram, TikTok, FB & IG)
+   - Nhãn màu theo nền tảng (Facebook, Instagram, Threads, FB & IG)
    - Kéo-thả (Drag & Drop) mượt trên cả 3 chế độ để đổi ngày/giờ
    - Phát hiện & cảnh báo xung đột < 30 phút cùng nền tảng (ERR-03)
    - Chặn đặt lịch trong quá khứ (ERR-02)
@@ -186,7 +186,7 @@
 
     let state = {
         mode: "MONTH",         // MONTH | WEEK | DAY
-        channelFilter: "ALL",  // ALL | Facebook | Instagram | TikTok
+        channelFilter: "ALL",  // ALL | Facebook | Instagram | Threads
         activeDay: TODAY_STR,
         draggedEventId: null,
         events: []
@@ -314,14 +314,14 @@
     function platformClass(platform) {
         if (platform === "Facebook") return "platform-fb";
         if (platform === "Instagram") return "platform-ig";
-        if (platform === "TikTok") return "platform-tiktok";
+        if (platform === "Threads" || platform === "TikTok") return "platform-threads";
         return "platform-fbig";
     }
 
     function platformDotColor(platform) {
         if (platform === "Facebook") return "#1877F2";
         if (platform === "Instagram") return "#E1306C";
-        if (platform === "TikTok") return "#111111";
+        if (platform === "Threads" || platform === "TikTok") return "#111111";
         return "#cc618a";
     }
 

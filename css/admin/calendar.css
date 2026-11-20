@@ -427,6 +427,7 @@
 .fr11-event-card.platform-ig {
     border-left-color: #E1306C;
 }
+.fr11-event-card.platform-threads,
 .fr11-event-card.platform-tiktok {
     border-left-color: #111111;
 }
