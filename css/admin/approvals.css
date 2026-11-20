@@ -286,7 +286,7 @@
 
 .channel-tag.fb { background: #e7f0fd; color: #1877f2; }
 .channel-tag.ig { background: #fde8f1; color: #d62976; }
-.channel-tag.tiktok { background: #ebebeb; color: #000; }
+.channel-tag.threads, .channel-tag.tiktok { background: #ebebeb; color: #000; }
 
 .action-btn-group {
     display: flex;

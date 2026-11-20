@@ -94,8 +94,8 @@
                 post_id: 124,
                 code: "BL-0124",
                 title: "Bộ cọ trang điểm Rose Gold 12 món",
-                platforms: ["TikTok"],
-                platform_label: "TikTok",
+                platforms: ["Threads"],
+                platform_label: "Threads",
                 author: "Nguyễn Phát Đạt",
                 status: "REJECTED",
                 planned_label: "08/11/2026 15:00",
@@ -200,7 +200,7 @@
             let platBadges = (post.platforms || [post.platform_label || "Đa kênh"]).map(function (pl) {
                 let cls = "fb";
                 if (pl.toLowerCase().indexOf("insta") !== -1) cls = "ig";
-                else if (pl.toLowerCase().indexOf("tik") !== -1) cls = "tiktok";
+                else if (pl.toLowerCase().indexOf("thread") !== -1 || pl.toLowerCase().indexOf("tik") !== -1) cls = "threads";
                 return '<span class="channel-tag ' + cls + '">' + UI.esc(pl) + '</span>';
             }).join(" ");
 
