@@ -3,42 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Blossom - Lịch đăng bài</title>
+    <link rel="icon" type="image/png" href="../../assets/logo.png">
+    <title>Blossom – Lịch đăng bài</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- CSS dùng chung (thêm css riêng của trang bên dưới nếu cần) -->
     <link rel="stylesheet" href="../../css/common.css">
     <link rel="stylesheet" href="../../css/layout.css">
     <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="../../css/admin/calendar.css">
+    <link rel="stylesheet" href="../../css/notifications.css">
 
-    <!-- Kiểm tra đăng nhập + phân quyền (chạy trước khi hiển thị trang) -->
+    <script src="../../js/api.js"></script>
     <script src="../../js/auth.js"></script>
     <script src="../../js/permissions.js"></script>
 </head>
-<body>
+<body data-search="Tìm kiếm bài viết..." data-active="calendar.html">
 
-    <!-- Sidebar + Header + Footer do js/layout.js render -->
     <aside class="sidebar" id="sidebar"></aside>
 
     <div class="main">
         <header class="topbar" id="topbar"></header>
 
-        <main class="content">
-            <div class="crumb">Blossom / Quản trị / Lịch đăng bài</div>
-            <h2 class="page-title">Lịch đăng bài</h2>
-            <p class="page-sub">Theo dõi lịch phát hành của toàn đội.</p>
+        <main class="content fr11-workspace" data-node-id="3:45303">
+            <!-- 1. PAGE HEADING (Figma 3:45304) -->
+            <section class="fr11-heading" data-node-id="3:45304">
+                <div class="fr11-breadcrumb" data-node-id="3:45305">
+                    <span data-node-id="3:45306">Blossom / Lịch đăng bài</span>
+                </div>
 
-            <!-- TODO: nội dung trang -->
-            <section class="card">
-                <div class="empty-state"><i data-icon="empty"></i><span>Trang đang được phát triển.</span></div>
+                <div class="fr11-title-row" data-node-id="3:45307">
+                    <div class="fr11-title-block" data-node-id="3:45308">
+                        <h2 class="fr11-title" data-node-id="3:45309">Lịch đăng bài</h2>
+                        <p class="fr11-subtitle" data-node-id="3:45310">Sắp xếp từng khoảnh khắc, để nội dung tỏa sáng đúng lúc.</p>
+                    </div>
+
+                    <div class="fr11-heading-actions">
+                        <button type="button" class="fr11-btn-primary" id="btnAddSchedule" data-node-id="3:45311">
+                            <img src="../../assets/figma/plus.svg" alt="" width="16" height="16">
+                            <span>Thêm lịch đăng</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. CALENDAR TOOLBAR (Figma 3:45312) -->
+            <section class="fr11-toolbar" data-node-id="3:45312">
+                <div class="fr11-month-nav" data-node-id="3:45313">
+                    <button type="button" class="fr11-nav-arrow" id="btnCalendarPrev" title="Kỳ trước" data-node-id="3:45314">
+                        <img src="../../assets/figma/chevron-left.svg" alt="Trước" width="18" height="18">
+                    </button>
+                    <h3 class="fr11-period-label" id="calendarPeriodLabel" data-node-id="3:45316">Tháng 11, 2026</h3>
+                    <button type="button" class="fr11-nav-arrow" id="btnCalendarNext" title="Kỳ sau" data-node-id="3:45317">
+                        <img src="../../assets/figma/chevron-right.svg" alt="Sau" width="18" height="18">
+                    </button>
+                    <button type="button" class="fr11-btn-outline" id="btnCalendarToday" data-node-id="3:45319">Hôm nay</button>
+                </div>
+
+                <div class="fr11-view-controls" data-node-id="3:45321">
+                    <select class="fr11-channel-select" id="channelFilterSelect" aria-label="Lọc theo kênh" data-node-id="3:45322">
+                        <option value="ALL">Tất cả kênh ⌄</option>
+                        <option value="Facebook">Facebook</option>
+                        <option value="Instagram">Instagram</option>
+                        <option value="TikTok">TikTok</option>
+                    </select>
+
+                    <div class="fr11-mode-group" role="tablist" aria-label="Chế độ xem lịch">
+                        <button type="button" class="fr11-mode-btn is-active" data-cal-mode="MONTH" data-node-id="3:45324">Tháng</button>
+                        <button type="button" class="fr11-mode-btn" data-cal-mode="WEEK" data-node-id="3:45326">Tuần</button>
+                        <button type="button" class="fr11-mode-btn" data-cal-mode="DAY">Ngày</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. CONFLICT WARNING BANNER (ERR-03 / BR-12) -->
+            <section class="fr11-conflict-banner" id="conflictBanner" hidden>
+                <div class="fr11-conflict-content">
+                    <span class="fr11-conflict-icon">⚠️</span>
+                    <div class="fr11-conflict-text">
+                        <strong>Cảnh báo xung đột thời gian đăng bài</strong>
+                        <span id="conflictDetailText">Phát hiện 2 bài viết cùng nền tảng được lên lịch cách nhau dưới 30 phút.</span>
+                    </div>
+                </div>
+                <div class="fr11-conflict-actions">
+                    <button type="button" class="fr11-btn-resolve" id="btnResolveConflict">Tự động giãn cách +30 phút</button>
+                </div>
+            </section>
+
+            <!-- 4. CALENDAR BOARD (MONTH / WEEK / DAY + DRAG & DROP) -->
+            <section class="fr11-calendar-card" id="calendarBoard" data-node-id="3:45328"></section>
+
+            <!-- 5. SCHEDULE LEGEND & PLATFORM COLORS (Figma 3:45563) -->
+            <section class="fr11-legend-bar" data-node-id="3:45563">
+                <div class="fr11-legend-items">
+                    <span class="fr11-legend-pill scheduled" data-node-id="3:45564">Đã lên lịch / Đã đăng</span>
+                    <span class="fr11-legend-pill pending" data-node-id="3:45566">Chờ duyệt</span>
+                    <span class="fr11-legend-pill editing" data-node-id="3:45568">Đang chỉnh sửa</span>
+
+                    <div class="fr11-platform-badges">
+                        <span class="fr11-plat-chip"><span class="fr11-platform-dot" style="background:#1877F2"></span> Facebook</span>
+                        <span class="fr11-plat-chip"><span class="fr11-platform-dot" style="background:#E1306C"></span> Instagram</span>
+                        <span class="fr11-plat-chip"><span class="fr11-platform-dot" style="background:#111111"></span> TikTok</span>
+                    </div>
+                </div>
+
+                <span class="fr11-legend-summary" id="calendarTotalSummary" data-node-id="3:45570">
+                    11 bài viết trong tháng · Múi giờ GMT+7
+                </span>
             </section>
         </main>
 
         <footer class="footer" id="footer"></footer>
     </div>
 
+    <!-- MODAL THÊM / ĐIỀU CHỈNH LỊCH ĐĂNG BÀI -->
+    <div class="fr11-modal-backdrop" id="fr11ScheduleModal" hidden>
+        <div class="fr11-modal" role="dialog" aria-modal="true" aria-labelledby="fr11ModalHeading">
+            <div class="fr11-modal-head">
+                <h3 class="fr11-modal-title" id="fr11ModalHeading">Thêm lịch đăng bài</h3>
+                <button type="button" class="fr11-modal-close" id="btnCloseScheduleModal" aria-label="Đóng">
+                    <img src="../../assets/figma/x-18.svg" alt="Đóng" width="18" height="18">
+                </button>
+            </div>
+
+            <form id="fr11ScheduleForm">
+                <input type="hidden" id="fr11FormId">
+
+                <div class="fr11-form-group" style="margin-bottom:12px">
+                    <label class="fr11-form-label" for="fr11FormTitle">Bài viết</label>
+                    <input type="text" class="fr11-form-input" id="fr11FormTitle" required>
+                </div>
+
+                <div class="fr11-form-row" style="margin-bottom:12px">
+                    <div class="fr11-form-group">
+                        <label class="fr11-form-label" for="fr11FormPlatform">Nền tảng</label>
+                        <select class="fr11-form-select" id="fr11FormPlatform">
+                            <option value="FB & IG">FB &amp; IG</option>
+                            <option value="Facebook">Facebook</option>
+                            <option value="Instagram">Instagram</option>
+                            <option value="TikTok">TikTok</option>
+                        </select>
+                    </div>
+                    <div class="fr11-form-group">
+                        <label class="fr11-form-label" for="fr11FormStatus">Trạng thái</label>
+                        <select class="fr11-form-select" id="fr11FormStatus">
+                            <option value="SCHEDULED">Đã lên lịch / Đã đăng</option>
+                            <option value="PENDING">Chờ duyệt</option>
+                            <option value="EDITING">Đang chỉnh sửa</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="fr11-form-row" style="margin-bottom:12px">
+                    <div class="fr11-form-group">
+                        <label class="fr11-form-label" for="fr11FormDate">Ngày đăng</label>
+                        <input type="date" class="fr11-form-input" id="fr11FormDate" required>
+                    </div>
+                    <div class="fr11-form-group">
+                        <label class="fr11-form-label" for="fr11FormTime">Khung giờ (GMT+7)</label>
+                        <input type="time" class="fr11-form-input" id="fr11FormTime" required>
+                    </div>
+                </div>
+
+                <div class="fr11-modal-error" id="fr11ModalError" hidden></div>
+
+                <div class="fr11-modal-foot">
+                    <a href="../staff/edit-post.html" class="fr11-btn-outline" id="btnOpenPostEditorFromCal" style="display:inline-flex;align-items:center;text-decoration:none;">Chỉnh sửa bài viết →</a>
+                    <div class="fr11-modal-foot-right">
+                        <button type="button" class="fr11-btn-outline" id="btnCancelScheduleModal">Hủy bỏ</button>
+                        <button type="submit" class="fr11-btn-primary">Lưu lịch đăng</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="../../js/components.js"></script>
     <script src="../../js/layout.js"></script>
+    <script src="../../js/notifications-store.js"></script>
+    <script src="../../js/calendar.js"></script>
 </body>
 </html>
