@@ -3,20 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Blossom - Thông báo</title>
+    <link rel="icon" type="image/png" href="../../assets/logo.png">
+    <title>Blossom Staff – Thông báo của tôi</title>
 
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- CSS dùng chung (thêm css riêng của trang bên dưới nếu cần) -->
+    <!-- CSS dùng chung -->
     <link rel="stylesheet" href="../../css/common.css">
     <link rel="stylesheet" href="../../css/layout.css">
     <link rel="stylesheet" href="../../css/components.css">
+    <!-- CSS riêng của trang -->
+    <link rel="stylesheet" href="../../css/notifications.css">
 
-    <!-- Kiểm tra đăng nhập + phân quyền (chạy trước khi hiển thị trang) -->
+    <!-- Kiểm tra đăng nhập + phân quyền -->
+    <script src="../../js/api.js"></script>
     <script src="../../js/auth.js"></script>
     <script src="../../js/permissions.js"></script>
 </head>
-<body>
+
+<body data-search="Tìm kiếm thông báo..." data-active="notifications.html">
 
     <!-- Sidebar + Header + Footer do js/layout.js render -->
     <aside class="sidebar" id="sidebar"></aside>
@@ -24,21 +30,47 @@
     <div class="main">
         <header class="topbar" id="topbar"></header>
 
-        <main class="content">
-            <div class="crumb">Blossom / Không gian nhân viên / Thông báo</div>
-            <h2 class="page-title">Thông báo</h2>
-            <p class="page-sub">Phản hồi và nhắc việc dành cho bạn.</p>
+        <main class="content notif-workspace">
 
-            <!-- TODO: nội dung trang -->
-            <section class="card">
-                <div class="empty-state"><i data-icon="empty"></i><span>Trang đang được phát triển.</span></div>
-            </section>
+            <div class="crumb">Blossom / Nhân viên / Thông báo của tôi</div>
+
+            <h2 class="page-title">Thông báo của tôi</h2>
+
+            <p class="page-sub">
+                Cập nhật kết quả phê duyệt bài viết, yêu cầu chỉnh sửa và lịch phát hành nội dung của bạn.
+            </p>
+
+            <!-- 1. TABS & ACTIONS -->
+            <div class="notif-bar">
+                <div class="notif-tabs">
+                    <button type="button" class="notif-tab-btn active" data-notif-tab="ALL">Tất cả thông báo</button>
+                    <button type="button" class="notif-tab-btn" data-notif-tab="UNREAD">Chưa đọc</button>
+                    <button type="button" class="notif-tab-btn" data-notif-tab="APPROVAL">Phê duyệt bài viết</button>
+                    <button type="button" class="notif-tab-btn" data-notif-tab="SYSTEM">Nhắc lịch & Hệ thống</button>
+                </div>
+
+                <div class="notif-actions">
+                    <button type="button" class="btn-mark-all" id="btnMarkAllRead">
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+                        <span>Đánh dấu tất cả đã đọc</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2. NOTIFICATIONS LIST -->
+            <section class="notif-list-card" id="notifListContainer"></section>
+
         </main>
 
         <footer class="footer" id="footer"></footer>
     </div>
 
+    <!-- JavaScript: component → layout → notifications-store → post-detail-modal → notifications-page -->
     <script src="../../js/components.js"></script>
     <script src="../../js/layout.js"></script>
+    <script src="../../js/notifications-store.js"></script>
+    <script src="../../js/post-detail-modal.js"></script>
+    <script src="../../js/notifications-page.js"></script>
+
 </body>
 </html>
