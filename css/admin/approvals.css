@@ -188,7 +188,7 @@
 .approvals-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
+    font-size: 15px;
     text-align: left;
 }
 
@@ -201,9 +201,10 @@
     padding: 14px 18px;
     font-weight: 600;
     color: var(--muted, #8c8294);
-    font-size: 12.5px;
+    font-size: 13.5px;
     letter-spacing: .3px;
     text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .approvals-table td {
@@ -211,6 +212,27 @@
     border-bottom: 1px solid #f6edf1;
     color: var(--text, #3b3140);
     vertical-align: middle;
+    font-size: 15px;
+}
+
+.approvals-table td:first-child b {
+    font-size: 15px;
+    color: var(--pink, #cc618a);
+    white-space: nowrap;
+}
+
+.approvals-table td.col-author,
+.approvals-table td:nth-child(3) {
+    white-space: nowrap;
+    font-size: 15px;
+    font-weight: 550;
+    color: #2f2635;
+    min-width: 190px;
+}
+
+.approvals-table td:nth-child(4),
+.approvals-table td:nth-child(5) {
+    white-space: nowrap;
 }
 
 .approvals-table tr:last-child td {
@@ -224,11 +246,13 @@
 .post-title-cell {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    max-width: 320px;
+    gap: 5px;
+    min-width: 220px;
+    max-width: 360px;
 }
 
 .post-title-link {
+    font-size: 16px;
     font-weight: 600;
     color: var(--text-strong, #24122e);
     text-decoration: none;
@@ -241,7 +265,7 @@
 }
 
 .post-meta-sub {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--muted, #8c8294);
     display: flex;
     gap: 8px;
@@ -252,10 +276,10 @@
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    padding: 2px 8px;
+    padding: 3px 9px;
     border-radius: 4px;
-    font-size: 11.5px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
     background: #f0f2f5;
     color: #444;
 }
@@ -267,7 +291,7 @@
 .action-btn-group {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
     justify-content: flex-end;
     flex-wrap: nowrap;
 }
@@ -275,17 +299,23 @@
 .btn-act {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    height: 32px;
-    padding: 0 10px;
-    border-radius: 6px;
-    font-size: 13px;
+    gap: 6px;
+    height: 34px;
+    padding: 0 12px;
+    border-radius: 7px;
+    font-size: 13.5px;
     font-weight: 600;
     border: 1px solid transparent;
     cursor: pointer;
     white-space: nowrap;
     flex: none;
     transition: all .2s;
+}
+
+.btn-act svg,
+.btn-act .ico {
+    width: 15px;
+    height: 15px;
 }
 
 .btn-act.approve {

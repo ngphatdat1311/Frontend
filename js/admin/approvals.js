@@ -31,12 +31,24 @@
         // Khởi tạo danh sách mặc định nếu chưa có
         const initial = [
             {
+                post_id: 129,
+                code: "BL-0129",
+                title: "Kem dưỡng trắng da Blossom",
+                platforms: ["Instagram"],
+                platform_label: "Instagram",
+                author: "Doãn Thị Minh Anh",
+                status: "PENDING_APPROVAL",
+                planned_label: "05/11/2026 08:00",
+                caption: "Kem dưỡng trắng da Blossom chứa chiết xuất hoa anh đào giúp nâng tông nhẹ nhàng và cấp ẩm sâu. Thành phần thuần chay lành tính cho mọi loại da.",
+                mediaUrl: "../../assets/figma/skincare-editorial.png"
+            },
+            {
                 post_id: 128,
                 code: "BL-0128",
                 title: "5 bước dưỡng da cho buổi sáng rạng rỡ",
                 platforms: ["Facebook", "Instagram"],
                 platform_label: "Facebook & Instagram",
-                author: "Nguyễn Hà Linh",
+                author: "Doãn Thị Minh Anh",
                 status: "PUBLISHED",
                 planned_label: "04/11/2026 08:00",
                 caption: "Routine 5 bước buổi sáng giúp làn da căng mướt tự nhiên cùng Blossom.",
@@ -219,16 +231,16 @@
             }
 
             return '<tr>' +
-                '<td><b>' + UI.esc(post.code || "BL-0" + post.post_id) + '</b></td>' +
+                '<td><b style="font-size:15px;color:var(--pink);white-space:nowrap;">' + UI.esc(post.code || "BL-0" + post.post_id) + '</b></td>' +
                 '<td>' +
                     '<div class="post-title-cell">' +
                         '<a href="javascript:void(0)" class="post-title-link" data-view-id="' + post.post_id + '">' + UI.esc(post.title) + '</a>' +
                         '<div class="post-meta-sub">' + platBadges + '</div>' +
                     '</div>' +
                 '</td>' +
-                '<td>' + UI.esc(post.author || "Nguyễn Phát Đạt") + '</td>' +
-                '<td>' + UI.esc(post.planned_label || "Chưa lên lịch") + '</td>' +
-                '<td><span style="font-size:12px;font-weight:600;color:' + st.color + ';background:' + st.bg + ';padding:3px 10px;border-radius:100px;">' + UI.esc(st.label) + '</span></td>' +
+                '<td class="col-author" style="white-space:nowrap;font-size:15px;font-weight:550;color:#2f2635;">' + UI.esc(post.author || "Doãn Thị Minh Anh") + '</td>' +
+                '<td style="white-space:nowrap;font-size:14.5px;color:#6e6472;">' + UI.esc(post.planned_label || "Chưa lên lịch") + '</td>' +
+                '<td style="white-space:nowrap;"><span style="font-size:13px;font-weight:600;color:' + st.color + ';background:' + st.bg + ';padding:4px 12px;border-radius:100px;">' + UI.esc(st.label) + '</span></td>' +
                 '<td style="text-align:right;">' + actionsHtml + '</td>' +
             '</tr>';
         }).join("");
@@ -365,6 +377,96 @@
         });
     }
 
+    /* ---------- XEM CHI TIẾT BÀI VIẾT ---------- */
+    function openPostDetail(postId) {
+        if (window.openPostDetailModal && typeof window.openPostDetailModal === "function") {
+            window.openPostDetailModal(postId);
+            return;
+        }
+        if (window.PostDetailModal && typeof window.PostDetailModal.open === "function") {
+            window.PostDetailModal.open(postId);
+            return;
+        }
+        showApprovalDetailModal(postId);
+    }
+
+    function showApprovalDetailModal(postId) {
+        const posts = getPosts();
+        const post = posts.find(function (p) {
+            return Number(p.post_id) === Number(postId) ||
+                   String(p.post_id) === String(postId) ||
+                   p.code === String(postId);
+        }) || {
+            post_id: postId,
+            code: "BL-0" + postId,
+            title: "Bài viết #" + postId,
+            platforms: ["Facebook & Instagram"],
+            platform_label: "Facebook & Instagram",
+            author: "Doãn Thị Minh Anh",
+            status: "PENDING_APPROVAL",
+            planned_label: "05/11/2026 08:00",
+            caption: "Kem dưỡng trắng da Blossom chứa chiết xuất hoa anh đào giúp nâng tông nhẹ nhàng và cấp ẩm sâu.",
+            mediaUrl: "../../assets/figma/skincare-editorial.png"
+        };
+
+        const st = STATUS_MAP[post.status] || { label: post.status, color: "#8c8294", bg: "#f0edf3" };
+        const plat = post.platform_label || (Array.isArray(post.platforms) ? post.platforms.join(" & ") : "Mạng xã hội");
+        const mediaUrl = post.mediaUrl || "../../assets/figma/skincare-editorial.png";
+
+        const bodyHtml =
+            '<div style="display:grid;grid-template-columns:220px 1fr;gap:20px;font-size:14px;align-items:start;">' +
+                '<div style="text-align:center;">' +
+                    '<img src="' + UI.esc(mediaUrl) + '" alt="Preview" style="width:100%;height:220px;object-fit:cover;border-radius:10px;border:1px solid #f4dce4;margin-bottom:10px;" onerror="this.src=\'../../assets/figma/skincare-editorial.png\'">' +
+                    '<button type="button" class="btn btn--secondary btn--sm" id="btnFallbackCopy" style="width:100%;font-size:13px;padding:8px 12px;">' +
+                        UI.icon("clipboard") + '<span>Sao chép Caption</span>' +
+                    '</button>' +
+                '</div>' +
+                '<div style="display:flex;flex-direction:column;gap:12px;">' +
+                    '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+                        '<span style="font-size:13px;font-weight:700;color:var(--pink);background:var(--pink-soft);padding:3px 8px;border-radius:4px;">' + UI.esc(post.code || "BL-0" + post.post_id) + ' · ' + UI.esc(plat) + '</span>' +
+                        '<span style="font-size:12px;font-weight:700;color:' + st.color + ';background:' + st.bg + ';padding:3px 10px;border-radius:100px;">' + UI.esc(st.label) + '</span>' +
+                    '</div>' +
+                    '<h3 style="font-family:var(--font-display);font-size:20px;color:#2f2635;margin:0;line-height:1.4;">' + UI.esc(post.title) + '</h3>' +
+                    '<div style="font-size:13px;color:var(--muted);display:flex;gap:16px;border-bottom:1px solid #f4dce4;padding-bottom:10px;">' +
+                        '<span>Tác giả: <b style="color:#2f2635;">' + UI.esc(post.author || "Doãn Thị Minh Anh") + '</b></span>' +
+                        '<span>Lịch dự kiến: <b style="color:#2f2635;">' + UI.esc(post.planned_label || "Chưa lên lịch") + '</b></span>' +
+                    '</div>' +
+                    '<div>' +
+                        '<div style="font-size:12.5px;font-weight:600;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Nội dung Caption:</div>' +
+                        '<div style="background:#fff9fb;padding:12px 14px;border-radius:8px;border:1px solid #f2dfe7;line-height:1.6;color:#2f2635;max-height:150px;overflow-y:auto;font-size:13.5px;">' +
+                            UI.esc(post.caption || "Chưa có caption.") +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+
+        UI.modal({
+            title: "Chi tiết bài viết – " + (post.code || "BL-0" + post.post_id),
+            size: "lg",
+            body: bodyHtml,
+            actions: [
+                { label: "Đóng", variant: "ghost", value: false },
+                { label: "Duyệt bài này", variant: "primary", value: "APPROVE" }
+            ]
+        }).then(function (act) {
+            if (act === "APPROVE") {
+                handleApprove(post.post_id);
+            }
+        });
+
+        setTimeout(function () {
+            const btnCopy = document.getElementById("btnFallbackCopy");
+            if (btnCopy) {
+                btnCopy.addEventListener("click", function () {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(post.caption || "");
+                        UI.toast("success", "Đã sao chép", "Đã sao chép nội dung caption.");
+                    }
+                });
+            }
+        }, 50);
+    }
+
     function bindEvents() {
         // Tab switching
         const tabQueueBtn = document.getElementById("tabQueueBtn");
@@ -404,8 +506,8 @@
             tbody.addEventListener("click", function (e) {
                 const viewBtn = e.target.closest("[data-view-id]");
                 if (viewBtn) {
-                    const id = Number(viewBtn.dataset.viewId);
-                    if (window.openPostDetailModal) window.openPostDetailModal(id);
+                    const id = viewBtn.dataset.viewId;
+                    openPostDetail(id);
                     return;
                 }
 
