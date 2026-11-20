@@ -1,6 +1,6 @@
 /* =========================================================
    FR-04 & FR-05 · TẠO & CHỈNH SỬA BÀI VIẾT (Task T06A660)
-   - Form nhiều nền tảng (Facebook, Instagram, TikTok)
+   - Form nhiều nền tảng (Facebook, Instagram, Threads)
    - Upload & kiểm tra định dạng/dung lượng: JPG/PNG/WEBP (≤ 10MB), MP4/MOV (≤ 50MB)
    - Auto-save tự động mỗi 30 giây + lưu tạm LocalStorage
    - Live Preview đa nền tảng
@@ -89,7 +89,7 @@
             post_id: 123,
             code: "BL-0123",
             title: "Routine tối giản cho ngày bận rộn",
-            platforms: ["Facebook", "Instagram", "TikTok"],
+            platforms: ["Facebook", "Instagram", "Threads"],
             platform_label: "Facebook & Instagram",
             author: "Trần Ngọc Mai",
             status: "REJECTED",
@@ -103,8 +103,8 @@
             post_id: 122,
             code: "BL-0122",
             title: "Review Son Dưỡng Thuần Chay Hương Đào Blossom",
-            platforms: ["TikTok"],
-            platform_label: "TikTok",
+            platforms: ["Threads"],
+            platform_label: "Threads",
             author: "Trần Ngọc Mai",
             status: "DRAFT",
             planned_date: "2026-11-10",
@@ -195,7 +195,7 @@
             headline: "Đôi môi mềm mượt suốt 24 giờ.",
             caption: "Khám phá dòng son dưỡng thuần chay chiết xuất từ hoa quả tươi hữu cơ, cấp ẩm sâu 24h và mang lại sắc hồng tự nhiên.",
             hashtags: "#SonDuong #BlossomBeauty #VeganCosmetics #LipCare",
-            platforms: ["Facebook", "Instagram", "TikTok"],
+            platforms: ["Facebook", "Instagram", "Threads"],
             planned_time: "20/11/2026         09:30",
             approver: "Nguyễn Minh Anh",
             status: "APPROVED",
@@ -244,7 +244,7 @@
             headline: "Đánh thức vẻ rạng rỡ tự nhiên mỗi sáng.",
             caption: "Công thức 15% Vitamin C tinh khiết kết hợp chiết xuất hoa anh đào giúp làm mờ thâm sạm chỉ sau 14 ngày sử dụng đều đặn.",
             hashtags: "#VitaminC #SerumBlossom #SkincareRoutine",
-            platforms: ["Instagram", "TikTok"],
+            platforms: ["Instagram", "Threads"],
             planned_time: "22/11/2026         19:00",
             approver: "Nguyễn Minh Anh",
             status: "REVISION_REQUESTED",
@@ -298,7 +298,7 @@
         const plats = getSelectedPlatforms();
         const select = document.getElementById("platformSelect");
         if (plats.length === 3) {
-            select.value = "Facebook, Instagram & TikTok";
+            select.value = "Facebook, Instagram & Threads";
         } else if (plats.indexOf("Facebook") !== -1 && plats.indexOf("Instagram") !== -1 && plats.length === 2) {
             select.value = "Facebook & Instagram";
         } else if (plats.length === 1) {
@@ -816,7 +816,7 @@
         document.getElementById("platformSelect").addEventListener("change", function (e) {
             const val = e.target.value;
             if (val === "Facebook & Instagram") setSelectedPlatforms(["Facebook", "Instagram"]);
-            else if (val === "Facebook, Instagram & TikTok") setSelectedPlatforms(["Facebook", "Instagram", "TikTok"]);
+            else if (val === "Facebook, Instagram & Threads") setSelectedPlatforms(["Facebook", "Instagram", "Threads"]);
             else setSelectedPlatforms([val]);
             updateChecklist();
             updateLivePreview();
