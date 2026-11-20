@@ -37,6 +37,7 @@
     const PAGE_ACCESS = {
         "staff/create-post.html": [M, S],
         "staff/edit-post.html":   [M, S],
+        "staff/approvals.html":   [M, S],
         "admin/create-post.html": [M, S],
         "admin/edit-post.html":   [M, S],
         "staff/posts.html":       [M, S],

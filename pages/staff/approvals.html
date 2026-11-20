@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="../../assets/logo.png">
+    <title>Blossom Staff – Theo dõi bài viết gửi duyệt</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS dùng chung -->
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <!-- CSS riêng của trang -->
+    <link rel="stylesheet" href="../../css/admin/approvals.css">
+    <link rel="stylesheet" href="../../css/notifications.css">
+
+    <!-- Kiểm tra đăng nhập + phân quyền -->
+    <script src="../../js/api.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/permissions.js"></script>
+</head>
+
+<body data-search="Tìm kiếm bài viết gửi duyệt..." data-active="posts.html">
+
+    <!-- Sidebar + Header + Footer do js/layout.js render -->
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <div class="main">
+        <header class="topbar" id="topbar"></header>
+
+        <main class="content approvals-workspace">
+
+            <div class="crumb">Blossom / Không gian nhân viên / Theo dõi duyệt bài</div>
+
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;">
+                <div>
+                    <h2 class="page-title">Theo dõi bài viết gửi duyệt</h2>
+                    <p class="page-sub">
+                        Theo dõi tiến độ, phản hồi và kết quả phê duyệt các bài viết của bạn từ Ban quản lý (Manager).
+                    </p>
+                </div>
+                <div style="display:flex;gap:10px;align-items:center;">
+                    <a href="../admin/approvals.html" class="btn btn--primary btn--sm" style="background:#8d4f38;border-color:#8d4f38;white-space:nowrap;padding:9px 16px;">
+                        → Chuyển sang giao diện Duyệt bài của Quản lý
+                    </a>
+                    <a href="create-post.html" class="btn btn--secondary btn--sm" style="white-space:nowrap;padding:9px 16px;">
+                        + Tạo bài viết mới
+                    </a>
+                </div>
+            </div>
+
+            <!-- THÔNG BÁO QUY TẮC NGHIỆP VỤ PHÂN QUYỀN (BR-01 / FR-09) -->
+            <div style="background:#fff7ed;border:1px solid #fed7aa;border-left:4px solid #f97316;padding:16px 20px;border-radius:8px;margin:20px 0 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                <div style="max-width:850px;">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ea580c;"></span>
+                        <strong style="color:#9a3412;font-size:14.5px;">Phân định vai trò & quyền hạn:</strong>
+                    </div>
+                    <p style="margin:0;font-size:13.5px;color:#7c2d12;line-height:1.5;">
+                        Quyền hạn <strong>Phê duyệt, Từ chối và Yêu cầu sửa</strong> thuộc về vai trò <strong>Quản lý (Manager) & Admin</strong> tại trang Duyệt bài. Màn hình này hỗ trợ Nhân viên (Staff) theo dõi danh sách các bài viết đang chờ duyệt, đọc ghi chú phản hồi, và có nút chuyển nhanh sang giao diện Quản lý để kiểm thử toàn diện luồng nghiệp vụ.
+                    </p>
+                </div>
+                <a href="../admin/approvals.html" class="btn btn--ghost btn--sm" style="color:#9a3412;font-weight:600;white-space:nowrap;">
+                    Xem Hàng đợi Quản lý &rarr;
+                </a>
+            </div>
+
+            <!-- STAT CARDS -->
+            <section class="approval-stats-row">
+                <div class="approval-stat-card">
+                    <div class="sc-icon orange">
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                    </div>
+                    <div class="sc-info">
+                        <span class="sc-label">Bài chờ duyệt</span>
+                        <strong class="sc-val" id="statStaffPending">3</strong>
+                        <small class="sc-trend">Đang gửi Ban quản lý</small>
+                    </div>
+                </div>
+
+                <div class="approval-stat-card">
+                    <div class="sc-icon purple">
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                    </div>
+                    <div class="sc-info">
+                        <span class="sc-label">Yêu cầu chỉnh sửa</span>
+                        <strong class="sc-val" id="statStaffRevision">1</strong>
+                        <small class="sc-trend" style="color:#7a6aa8;">Cần cập nhật lại caption/ảnh</small>
+                    </div>
+                </div>
+
+                <div class="approval-stat-card">
+                    <div class="sc-icon green">
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    </div>
+                    <div class="sc-info">
+                        <span class="sc-label">Đã được phê duyệt</span>
+                        <strong class="sc-val" id="statStaffApproved">4</strong>
+                        <small class="sc-trend green">Sẵn sàng xuất bản trên Calendar</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BẢNG THEO DÕI BÀI VIẾT GỬI DUYỆT -->
+            <section class="approvals-card">
+                <div class="approvals-card-head" style="justify-content:space-between;display:flex;align-items:center;padding:16px 20px;border-bottom:1px solid #f4dce4;">
+                    <div style="font-weight:700;font-size:16px;color:#8d4f38;">Danh sách bài viết của bạn đang trong quy trình duyệt</div>
+                    <div style="display:flex;gap:12px;align-items:center;">
+                        <input type="text" id="staffApprovalSearch" placeholder="Tìm theo tiêu đề, mã bài..." class="input" style="width:260px;padding:6px 12px;font-size:13px;border-radius:6px;border:1px solid #e2e8f0;">
+                    </div>
+                </div>
+
+                <div class="approvals-table-wrap">
+                    <table class="approvals-table">
+                        <thead>
+                            <tr>
+                                <th style="width:100px;">Mã bài</th>
+                                <th>Tiêu đề & Nội dung tóm tắt</th>
+                                <th style="width:160px;">Kênh xuất bản</th>
+                                <th style="width:170px;">Thời gian gửi duyệt</th>
+                                <th style="width:160px;">Trạng thái</th>
+                                <th style="width:200px;text-align:right;">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="staffApprovalsTbody">
+                            <!-- Render bằng JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="footer" id="footer"></footer>
+    </div>
+
+    <!-- Scripts dùng chung -->
+    <script src="../../js/components.js"></script>
+    <script src="../../js/layout.js"></script>
+    <script src="../../js/notifications-store.js"></script>
+    <script src="../../js/post-detail-modal.js"></script>
+
+    <script>
+    (function () {
+        "use strict";
+
+        function getPosts() {
+            try {
+                const list = JSON.parse(localStorage.getItem("blossom_posts_fr06_07_v1") || "[]");
+                if (list && list.length) return list;
+            } catch (e) {}
+
+            return [
+                {
+                    post_id: 1,
+                    code: "BL-001",
+                    title: "Bộ sưu tập chăm sóc da mùa thu thuần khiết Blossom",
+                    caption: "Routine 5 bước buổi sáng giúp làn da căng mướt tự nhiên cùng các sản phẩm thiên nhiên từ Blossom Beauty Store.",
+                    platform_label: "Facebook & Instagram",
+                    author: "Nguyễn Phát Đạt",
+                    status: "PENDING_APPROVAL",
+                    planned_label: "20/11/2026 14:00",
+                    created_at: "20/11/2026 09:30"
+                },
+                {
+                    post_id: 2,
+                    code: "BL-002",
+                    title: "Bí quyết phục hồi hàng rào ẩm cho da nhạy cảm",
+                    caption: "Cung cấp ceramide và vitamin B5 thuần chay giúp da khỏe khoắn suốt mùa hanh khô.",
+                    platform_label: "Instagram",
+                    author: "Nguyễn Phát Đạt",
+                    status: "REVISION_REQUESTED",
+                    revision_reason: "Ảnh chụp sản phẩm chưa đủ sáng và logo chưa đúng vị trí góc phải. Vui lòng cập nhật lại ảnh độ phân giải cao.",
+                    planned_label: "21/11/2026 09:00",
+                    created_at: "19/11/2026 15:45"
+                },
+                {
+                    post_id: 3,
+                    code: "BL-003",
+                    title: "Ưu đãi tri ân Black Friday – Giảm tới 40% dòng Serum hoa anh đào",
+                    caption: "Cơ hội sở hữu trọn bộ dưỡng trắng da chiết xuất từ hoa anh đào với giá độc quyền chỉ trong 3 ngày.",
+                    platform_label: "Facebook & TikTok",
+                    author: "Nguyễn Phát Đạt",
+                    status: "APPROVED",
+                    planned_label: "25/11/2026 10:00",
+                    created_at: "18/11/2026 11:20"
+                },
+                {
+                    post_id: 4,
+                    code: "BL-004",
+                    title: "Tips tẩy trang đúng cách không gây bít tắc lỗ chân lông",
+                    caption: "Nhũ hóa dầu tẩy trang trong 60 giây để cuốn trôi mọi bụi mịn mà vẫn giữ trọn màng ẩm sinh học.",
+                    platform_label: "TikTok",
+                    author: "Nguyễn Phát Đạt",
+                    status: "PENDING_APPROVAL",
+                    planned_label: "22/11/2026 19:30",
+                    created_at: "20/11/2026 10:15"
+                }
+            ];
+        }
+
+        const STATUS_BADGES = {
+            PENDING_APPROVAL: { label: "Chờ duyệt", cls: "st-pending", color: "#d9923a", bg: "#fff0e1" },
+            REVISION_REQUESTED: { label: "Yêu cầu sửa", cls: "st-revision", color: "#7a6aa8", bg: "#efeaf8" },
+            APPROVED: { label: "Đã duyệt", cls: "st-approved", color: "#2563eb", bg: "#eff6ff" },
+            REJECTED: { label: "Bị từ chối", cls: "st-rejected", color: "#d64545", bg: "#fdeaea" }
+        };
+
+        function render() {
+            const posts = getPosts();
+            const relevant = posts.filter(function (p) {
+                return p.status === "PENDING_APPROVAL" || p.status === "REVISION_REQUESTED" || p.status === "APPROVED";
+            });
+
+            // Cập nhật Stat Cards
+            const pendingCount = posts.filter(function (p) { return p.status === "PENDING_APPROVAL"; }).length;
+            const revisionCount = posts.filter(function (p) { return p.status === "REVISION_REQUESTED"; }).length;
+            const approvedCount = posts.filter(function (p) { return p.status === "APPROVED"; }).length;
+
+            const elPending = document.getElementById("statStaffPending");
+            const elRevision = document.getElementById("statStaffRevision");
+            const elApproved = document.getElementById("statStaffApproved");
+            if (elPending) elPending.textContent = pendingCount;
+            if (elRevision) elRevision.textContent = revisionCount;
+            if (elApproved) elApproved.textContent = approvedCount;
+
+            const q = (document.getElementById("staffApprovalSearch")?.value || "").toLowerCase().trim();
+            const filtered = relevant.filter(function (p) {
+                if (!q) return true;
+                return (p.title || "").toLowerCase().indexOf(q) !== -1 ||
+                       (p.code || "").toLowerCase().indexOf(q) !== -1 ||
+                       (p.caption || "").toLowerCase().indexOf(q) !== -1;
+            });
+
+            const tbody = document.getElementById("staffApprovalsTbody");
+            if (!tbody) return;
+
+            if (!filtered.length) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:48px 20px;color:var(--muted);">' +
+                    '<div style="font-size:15px;font-weight:600;margin-bottom:6px;">Hiện tại không có bài viết nào đang trong quy trình duyệt</div>' +
+                    '<p style="font-size:13px;margin:0 0 16px 0;">Hãy tạo bài viết mới và nhấn "Gửi duyệt" để gửi tới Ban quản lý.</p>' +
+                    '<a href="create-post.html" class="btn btn--primary btn--sm">+ Tạo bài viết mới</a>' +
+                    '</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(function (p) {
+                const st = STATUS_BADGES[p.status] || { label: p.status, color: "#8c8294", bg: "#f0edf3" };
+                const reasonHtml = p.revision_reason ?
+                    ('<div style="margin-top:6px;font-size:12px;background:#fef2f2;border-left:3px solid #ef4444;padding:4px 8px;border-radius:4px;color:#991b1b;">' +
+                        '<strong>Ghi chú của Quản lý:</strong> ' + UI.esc(p.revision_reason) +
+                    '</div>') : "";
+
+                return '<tr>' +
+                    '<td><span style="font-weight:700;font-size:12.5px;color:var(--pink);background:var(--pink-soft);padding:3px 8px;border-radius:4px;">' + UI.esc(p.code || "BL-00" + p.post_id) + '</span></td>' +
+                    '<td>' +
+                        '<div style="font-weight:600;font-size:14px;color:var(--text-strong);margin-bottom:2px;">' + UI.esc(p.title) + '</div>' +
+                        '<div style="font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:400px;">' + UI.esc(p.caption || "") + '</div>' +
+                        reasonHtml +
+                    '</td>' +
+                    '<td><span style="font-size:12.5px;background:#f1f5f9;color:#334155;padding:3px 8px;border-radius:4px;font-weight:500;">' + UI.esc(p.platform_label || "Đa kênh") + '</span></td>' +
+                    '<td style="font-size:13px;color:#64748b;">' + UI.esc(p.created_at || "Hôm nay 09:30") + '<br><small style="color:var(--muted);">Lịch: ' + UI.esc(p.planned_label || "Chưa chọn") + '</small></td>' +
+                    '<td><span style="font-size:12px;font-weight:700;color:' + st.color + ';background:' + st.bg + ';padding:4px 10px;border-radius:100px;display:inline-block;">' + UI.esc(st.label) + '</span></td>' +
+                    '<td style="text-align:right;">' +
+                        '<div style="display:inline-flex;gap:6px;justify-content:flex-end;">' +
+                            '<button type="button" class="btn btn--secondary btn--sm btn-act-detail" data-id="' + p.post_id + '" style="font-size:12px;padding:5px 10px;">Chi tiết</button>' +
+                            '<a href="edit-post.html?id=' + p.post_id + '" class="btn btn--ghost btn--sm" style="font-size:12px;padding:5px 10px;color:var(--pink);">Chỉnh sửa</a>' +
+                        '</div>' +
+                    '</td>' +
+                '</tr>';
+            }).join("");
+
+            // Gắn sự kiện mở chi tiết
+            tbody.querySelectorAll(".btn-act-detail").forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    const id = this.dataset.id;
+                    if (window.PostDetailModal && window.PostDetailModal.open) {
+                        window.PostDetailModal.open(id);
+                    }
+                });
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            render();
+            const searchInput = document.getElementById("staffApprovalSearch");
+            if (searchInput) {
+                searchInput.addEventListener("input", render);
+            }
+        });
+    })();
+    </script>
+</body>
+</html>

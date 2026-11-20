@@ -3,20 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Blossom - Duyệt bài</title>
+    <link rel="icon" type="image/png" href="../../assets/logo.png">
+    <title>Blossom Admin – Phê duyệt bài viết</title>
 
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- CSS dùng chung (thêm css riêng của trang bên dưới nếu cần) -->
+    <!-- CSS dùng chung -->
     <link rel="stylesheet" href="../../css/common.css">
     <link rel="stylesheet" href="../../css/layout.css">
     <link rel="stylesheet" href="../../css/components.css">
+    <!-- CSS riêng của trang -->
+    <link rel="stylesheet" href="../../css/admin/approvals.css">
+    <link rel="stylesheet" href="../../css/notifications.css">
 
-    <!-- Kiểm tra đăng nhập + phân quyền (chạy trước khi hiển thị trang) -->
+    <!-- Kiểm tra đăng nhập + phân quyền -->
+    <script src="../../js/api.js"></script>
     <script src="../../js/auth.js"></script>
     <script src="../../js/permissions.js"></script>
 </head>
-<body>
+
+<body data-search="Tìm kiếm bài viết chờ duyệt..." data-active="approvals.html">
 
     <!-- Sidebar + Header + Footer do js/layout.js render -->
     <aside class="sidebar" id="sidebar"></aside>
@@ -24,21 +31,125 @@
     <div class="main">
         <header class="topbar" id="topbar"></header>
 
-        <main class="content">
-            <div class="crumb">Blossom / Quản trị / Duyệt bài</div>
-            <h2 class="page-title">Duyệt bài</h2>
-            <p class="page-sub">Duyệt các bài viết đang chờ phê duyệt.</p>
+        <main class="content approvals-workspace">
 
-            <!-- TODO: nội dung trang -->
-            <section class="card">
-                <div class="empty-state"><i data-icon="empty"></i><span>Trang đang được phát triển.</span></div>
+            <div class="crumb">Blossom / Quản trị / Phê duyệt bài viết</div>
+
+            <h2 class="page-title">Phê duyệt bài viết</h2>
+
+            <p class="page-sub">
+                Kiểm tra, duyệt nội dung và giữ vững tiêu chuẩn thương hiệu trước khi phát hành.
+            </p>
+
+            <!-- 1. STAT CARDS -->
+            <section class="approval-stats-row">
+                <div class="approval-stat-card">
+                    <div class="sc-icon orange">
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                    </div>
+                    <div class="sc-info">
+                        <small>Chờ duyệt</small>
+                        <strong id="statPendingCount">0</strong>
+                    </div>
+                </div>
+
+                <div class="approval-stat-card">
+                    <div class="sc-icon green">
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+                    </div>
+                    <div class="sc-info">
+                        <small>Đã duyệt hôm nay</small>
+                        <strong id="statApprovedCount">0</strong>
+                    </div>
+                </div>
+
+                <div class="approval-stat-card">
+                    <div class="sc-icon purple">
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9M16 4l4 4L8 20H4v-4z"/></svg>
+                    </div>
+                    <div class="sc-info">
+                        <small>Yêu cầu chỉnh sửa</small>
+                        <strong id="statRevisionCount">0</strong>
+                    </div>
+                </div>
+
+                <div class="approval-stat-card">
+                    <div class="sc-icon red">
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                    </div>
+                    <div class="sc-info">
+                        <small>Đã từ chối</small>
+                        <strong id="statRejectedCount">0</strong>
+                    </div>
+                </div>
             </section>
+
+            <!-- 2. TABS & FILTER BAR -->
+            <div class="approval-bar">
+                <div class="approval-tabs">
+                    <button type="button" class="app-tab-btn active" id="tabQueueBtn">
+                        <span>Hàng đợi chờ duyệt</span>
+                        <span class="count-badge" id="queueBadge">0</span>
+                    </button>
+                    <button type="button" class="app-tab-btn" id="tabHistoryBtn">
+                        <span>Lịch sử đã xử lý</span>
+                        <span class="count-badge" id="historyBadge">0</span>
+                    </button>
+                </div>
+
+                <div class="approval-filters">
+                    <select class="filter-select" id="platformFilter" aria-label="Lọc theo nền tảng">
+                        <option value="ALL">Tất cả nền tảng</option>
+                        <option value="Facebook">Facebook</option>
+                        <option value="Instagram">Instagram</option>
+                        <option value="TikTok">TikTok</option>
+                    </select>
+
+                    <select class="filter-select" id="authorFilter" aria-label="Lọc theo tác giả">
+                        <option value="ALL">Tất cả tác giả</option>
+                        <option value="Nguyễn Phát Đạt">Nguyễn Phát Đạt</option>
+                        <option value="Nguyễn Hà Linh">Nguyễn Hà Linh</option>
+                        <option value="Trần Ngọc Mai">Trần Ngọc Mai</option>
+                        <option value="Lê Thu Hương">Lê Thu Hương</option>
+                    </select>
+
+                    <div class="filter-search">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        <input type="text" id="approvalSearchInput" placeholder="Tìm theo tiêu đề, mã..." autocomplete="off">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. APPROVAL TABLE -->
+            <section class="table-card">
+                <table class="approvals-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 110px;">Mã bài</th>
+                            <th>Tiêu đề bài viết & Kênh</th>
+                            <th style="width: 160px;">Tác giả</th>
+                            <th style="width: 170px;">Lịch dự kiến</th>
+                            <th style="width: 140px;">Trạng thái</th>
+                            <th style="text-align: right; width: 330px;">Quyết định</th>
+                        </tr>
+                    </thead>
+                    <tbody id="approvalsTbody">
+                        <!-- Rendered by JS -->
+                    </tbody>
+                </table>
+            </section>
+
         </main>
 
         <footer class="footer" id="footer"></footer>
     </div>
 
+    <!-- JavaScript: component → layout → notifications → modal → approvals logic -->
     <script src="../../js/components.js"></script>
     <script src="../../js/layout.js"></script>
+    <script src="../../js/notifications-store.js"></script>
+    <script src="../../js/post-detail-modal.js"></script>
+    <script src="../../js/admin/approvals.js"></script>
+
 </body>
 </html>

@@ -1,0 +1,353 @@
+/* ==========================================================
+   ADMIN / MANAGER – Trang Phê duyệt bài viết (FR-08 / Task T06A663)
+   Kế thừa Design System: common.css / layout.css / components.css
+   Font chữ, cỡ chữ, màu sắc đồng bộ 100% với Dashboard của Leader
+   ========================================================== */
+
+.approvals-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ---------- 1. STAT CARDS ---------- */
+.approval-stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.approval-stat-card {
+    background: #fff;
+    border: 1px solid var(--pink-line, #f4dce4);
+    border-radius: var(--radius, 10px);
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .02);
+    transition: transform .2s, box-shadow .2s;
+}
+
+.approval-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(217, 70, 122, .08);
+}
+
+.sc-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+}
+
+.sc-icon.orange { background: var(--orange-bg, #fff0e1); color: var(--orange, #d9923a); }
+.sc-icon.green  { background: var(--green-bg, #e6f5ec);  color: var(--green, #3f9a65); }
+.sc-icon.purple { background: var(--purple-bg, #efeaf8); color: var(--purple, #7a6aa8); }
+.sc-icon.red    { background: var(--red-bg, #fdeaea);    color: var(--red, #d64545); }
+
+.sc-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.sc-info small {
+    font-size: 13.5px;
+    color: var(--muted, #8c8294);
+    font-weight: 500;
+}
+
+.sc-info strong {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text-strong, #24122e);
+    line-height: 1.1;
+}
+
+/* ---------- 2. TABS & FILTER BAR ---------- */
+.approval-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    background: #fff;
+    border: 1px solid var(--pink-line, #f4dce4);
+    border-radius: var(--radius, 10px);
+    padding: 12px 18px;
+}
+
+.approval-tabs {
+    display: flex;
+    gap: 8px;
+}
+
+.app-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--muted, #8c8294);
+    transition: all .2s;
+}
+
+.app-tab-btn:hover {
+    color: var(--pink, #d9467a);
+    background: var(--pink-bg, #fdf6f8);
+}
+
+.app-tab-btn.active {
+    background: var(--pink-soft, #fbe4ec);
+    color: var(--pink, #d9467a);
+    border-color: var(--pink-border, #f1bfd0);
+}
+
+.count-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    background: rgba(217, 70, 122, .12);
+    color: var(--pink, #d9467a);
+}
+
+.approval-filters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.filter-select {
+    height: 38px;
+    padding: 0 12px;
+    border: 1px solid var(--pink-line, #f4dce4);
+    border-radius: 8px;
+    background: #fff;
+    font-size: 14px;
+    color: var(--text, #3b3140);
+    outline: none;
+    transition: border-color .2s;
+}
+
+.filter-select:focus {
+    border-color: var(--pink, #d9467a);
+}
+
+.filter-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.filter-search input {
+    height: 38px;
+    padding: 0 12px 0 34px;
+    border: 1px solid var(--pink-line, #f4dce4);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--text, #3b3140);
+    outline: none;
+    width: 220px;
+    transition: all .2s;
+}
+
+.filter-search input:focus {
+    border-color: var(--pink, #d9467a);
+    width: 260px;
+}
+
+.filter-search svg {
+    position: absolute;
+    left: 10px;
+    width: 16px;
+    height: 16px;
+    color: var(--muted, #8c8294);
+    pointer-events: none;
+}
+
+/* ---------- 3. TABLE ---------- */
+.table-card {
+    background: #fff;
+    border: 1px solid var(--pink-line, #f4dce4);
+    border-radius: var(--radius, 10px);
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .02);
+}
+
+.approvals-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    text-align: left;
+}
+
+.approvals-table thead {
+    background: #faf4f6;
+    border-bottom: 1px solid var(--pink-line, #f4dce4);
+}
+
+.approvals-table th {
+    padding: 14px 18px;
+    font-weight: 600;
+    color: var(--muted, #8c8294);
+    font-size: 12.5px;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+}
+
+.approvals-table td {
+    padding: 16px 18px;
+    border-bottom: 1px solid #f6edf1;
+    color: var(--text, #3b3140);
+    vertical-align: middle;
+}
+
+.approvals-table tr:last-child td {
+    border-bottom: none;
+}
+
+.approvals-table tr:hover td {
+    background: #fff9fb;
+}
+
+.post-title-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-width: 320px;
+}
+
+.post-title-link {
+    font-weight: 600;
+    color: var(--text-strong, #24122e);
+    text-decoration: none;
+    line-height: 1.4;
+    transition: color .2s;
+}
+
+.post-title-link:hover {
+    color: var(--pink, #d9467a);
+}
+
+.post-meta-sub {
+    font-size: 12px;
+    color: var(--muted, #8c8294);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.channel-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11.5px;
+    font-weight: 500;
+    background: #f0f2f5;
+    color: #444;
+}
+
+.channel-tag.fb { background: #e7f0fd; color: #1877f2; }
+.channel-tag.ig { background: #fde8f1; color: #d62976; }
+.channel-tag.tiktok { background: #ebebeb; color: #000; }
+
+.action-btn-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+}
+
+.btn-act {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    height: 32px;
+    padding: 0 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    flex: none;
+    transition: all .2s;
+}
+
+.btn-act.approve {
+    background: var(--green-bg, #e6f5ec);
+    color: var(--green, #3f9a65);
+    border-color: var(--green-bd, #c6e6d2);
+}
+.btn-act.approve:hover {
+    background: var(--green, #3f9a65);
+    color: #fff;
+}
+
+.btn-act.reject {
+    background: var(--red-bg, #fdeaea);
+    color: var(--red, #d64545);
+    border-color: #f7cece;
+}
+.btn-act.reject:hover {
+    background: var(--red, #d64545);
+    color: #fff;
+}
+
+.btn-act.revision {
+    background: var(--purple-bg, #efeaf8);
+    color: var(--purple, #7a6aa8);
+    border-color: var(--purple-bd, #ddd3ef);
+}
+.btn-act.revision:hover {
+    background: var(--purple, #7a6aa8);
+    color: #fff;
+}
+
+.btn-act.view {
+    background: #fff;
+    color: var(--text, #3b3140);
+    border-color: var(--pink-line, #f4dce4);
+}
+.btn-act.view:hover {
+    border-color: var(--pink, #d9467a);
+    color: var(--pink, #d9467a);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 1024px) {
+    .approval-stats-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 720px) {
+    .approval-stats-row {
+        grid-template-columns: 1fr;
+    }
+    .approval-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .approval-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .filter-search input {
+        width: 100%;
+    }
+}
