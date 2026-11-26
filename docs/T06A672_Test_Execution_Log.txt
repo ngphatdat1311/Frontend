@@ -1,0 +1,39 @@
+================================================================
+BLOSSOM BEAUTY STORE - BỘ KIỂM THỬ PHI CHỨC NĂNG (TASK T06A672)
+Thực hiện: Nguyễn Phát Đạt (N25DTCN082) - BA / UI-UX Lead
+================================================================
+
+>>> 1. KIỂM THỬ BẢO MẬT HỆ THỐNG (SECURITY)
+  ✅ [PASS] NFR-SEC-01: Đăng nhập tài khoản active (Role: MANAGER)
+  ✅ [PASS] NFR-SEC-02: Đăng nhập mật khẩu tiện ích (Role: STAFF)
+  ✅ [PASS] NFR-SEC-03: Chặn tài khoản bị khóa (Mã lỗi: locked)
+  ✅ [PASS] NFR-SEC-04: Vô hiệu hóa mật khẩu cũ (Từ chối mật khẩu cũ)
+  ✅ [PASS] NFR-SEC-05: Đăng nhập bằng mật khẩu mới (Xác thực thành công)
+  ✅ [PASS] NFR-SEC-06: Thu hồi token / session khi Logout (Session null)
+  ✅ [PASS] NFR-SEC-07: Chống tấn công XSS (Sanitize) (Đã escape an toàn)
+  ✅ [PASS] NFR-SEC-08: Kiểm tra độ phức tạp mật khẩu (Đạt chuẩn 4 yếu tố)
+
+>>> 2. KIỂM THỬ PHÂN QUYỀN TRUY CẬP (RBAC)
+  ✅ [PASS] NFR-RBAC-01: Quản lý xem bài nhân viên (chỉ xem, không nút sửa) (Chỉ có nút Đóng)
+  ✅ [PASS] NFR-RBAC-02: Nhân viên xem bài chính mình (Có nút Chỉnh sửa)
+  ✅ [PASS] NFR-RBAC-03: Nhân viên xem bài người khác (bị chặn) (Bị chặn truy cập)
+  ✅ [PASS] NFR-RBAC-04: Chặn quyền duyệt bài của Staff (Role STAFF không duyệt bài)
+  ✅ [PASS] NFR-RBAC-05: Staff chỉ xem lịch cá nhân (7 sự kiện hợp lệ)
+  ✅ [PASS] NFR-RBAC-06: Quản lý xem lịch toàn đội (20 sự kiện toàn đội)
+  ✅ [PASS] NFR-RBAC-07: Thông báo riêng biệt Quản lý (8/8 thông báo Manager)
+  ✅ [PASS] NFR-RBAC-08: Thông báo riêng biệt Nhân viên (10/10 thông báo Staff)
+  ✅ [PASS] NFR-RBAC-09: Khóa sửa bài đã xuất bản (PUBLISHED) (Không thể sửa bài đã đăng)
+  ✅ [PASS] NFR-RBAC-10: Ràng buộc lý do từ chối >= 10 ký tự (Chặn lý do < 10 ký tự)
+
+>>> 3. KIỂM THỬ HIỆU NĂNG & BENCHMARK THỰC TẾ
+  ✅ [PASS] NFR-PERF-01: Thời gian lọc bài viết (< 2s) (0.020 ms)
+  ✅ [PASS] NFR-PERF-02: Thời gian tìm kiếm bài viết (< 2s) (0.069 ms)
+  ✅ [PASS] NFR-PERF-03: Thời gian lọc lịch xuất bản (< 2s) (0.032 ms)
+  ✅ [PASS] NFR-PERF-04: Độ trễ thông báo thời gian thực (< 3s) (0.005 ms)
+  ✅ [PASS] NFR-PERF-05: Độ trễ phát hiện cảnh báo trùng lịch (< 3s) (0.028 ms)
+  ✅ [PASS] NFR-PERF-06: Thời gian xuất file báo cáo (< 5s) (0.058 ms)
+
+================================================================
+TỔNG KẾT: 24 / 24 TEST CASES PASSED (100% ĐẠT CHUẨN)
+Task T06A672 đã đủ điều kiện nghiệm thu với điểm tối đa 5.56 Điểm!
+================================================================
